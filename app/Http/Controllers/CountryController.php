@@ -42,7 +42,9 @@ class CountryController extends Controller
         ];
 
         if (Country::create($data)) {
-            return redirect()->back();
+            return redirect()->back()->with(['success' => "Magic has been spelled!"]);
+        } else {
+            return redirect()->back()->with(['failure' => "Magic has failed to spell!"]);
         }
     }
 
@@ -59,7 +61,9 @@ class CountryController extends Controller
      */
     public function edit(Country $country)
     {
-        //
+        return view('country.edit', [
+            'country' => $country,
+        ]);
     }
 
     /**
@@ -67,7 +71,21 @@ class CountryController extends Controller
      */
     public function update(Request $request, Country $country)
     {
-        //
+        $request->validate([
+            'name' => ['required'],
+            'capital' => ['required'],
+        ]);
+
+        $data = [
+            'name' => $request->name,
+            'capital' => $request->capital,
+        ];
+
+        if ($country->update($data)) {
+            return redirect()->back()->with(['success' => "Magic has been spelled!"]);
+        } else {
+            return redirect()->back()->with(['failure' => "Magic has failed to spell!"]);
+        }
     }
 
     /**
@@ -75,6 +93,10 @@ class CountryController extends Controller
      */
     public function destroy(Country $country)
     {
-        //
+        if ($country->delete()) {
+            return redirect()->back()->with(['success' => "Magic has been spelled!"]);
+        } else {
+            return redirect()->back()->with(['failure' => "Magic has failed to spell!"]);
+        }
     }
 }

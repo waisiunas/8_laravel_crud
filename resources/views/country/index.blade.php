@@ -26,6 +26,22 @@
                     </div>
                     <div class="card-body">
 
+                        @session('success')
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+                        @endsession
+
+                        @session('failure')
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{ session('failure') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+                        @endsession
+
                         @if (count($countries) > 0)
                             <table class="table table-bordered m-0">
                                 <thead>
@@ -39,15 +55,22 @@
 
                                 <tbody>
                                     @foreach ($countries as $country)
-                                    <tr>
-                                        <td>1</td>
-                                        <td>{{ $country->name }}</td>
-                                        <td>{{ $country->capital }}</td>
-                                        <td>
-                                            <a href="" class="btn btn-primary">Edit</a>
-                                            <a href="" class="btn btn-danger">Delete</a>
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $country->name }}</td>
+                                            <td>{{ $country->capital }}</td>
+                                            <td>
+                                                <a href="{{ route('country.edit', $country) }}"
+                                                    class="btn btn-primary">Edit</a>
+                                                <form action="{{ route('country.destroy', $country) }}" method="POST" class="d-inline">
+                                                    @csrf
+                                                    @method("DELETE")
+                                                    <input type="submit" value="Delete" class="btn btn-danger">
+                                                </form>
+                                                {{-- <a href="{{ route('country.destroy', $country) }}"
+                                                    class="btn btn-danger">Delete</a> --}}
+                                            </td>
+                                        </tr>
                                     @endforeach
                                 </tbody>
                             </table>
