@@ -1,13 +1,24 @@
 <?php
 
 use App\Http\Controllers\CountryController;
+use App\Http\Controllers\TrashedCountryController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [CountryController::class, 'index'])->name('country.index');
-Route::get('/country/create', [CountryController::class, 'create'])->name('country.create');
-Route::post('/country/create', [CountryController::class, 'store']);
-Route::get('/country/{country}/edit', [CountryController::class, 'edit'])->name('country.edit');
-// Route::post('/country/{country}/edit', [CountryController::class, 'update']);
-Route::patch('/country/{country}/edit', [CountryController::class, 'update']);
-// Route::get('/country/{country}/destroy', [CountryController::class, 'destroy'])->name('country.destroy');
-Route::delete('/country/{country}/destroy', [CountryController::class, 'destroy'])->name('country.destroy');
+Route::controller(CountryController::class)->name('country.')->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::prefix('country')->group(function () {
+        Route::get('create', 'create')->name('create');
+        Route::post('create', 'store');
+        Route::get('{country}/edit', 'edit')->name('edit');
+        // Route::post('{country}/edit', 'update');
+        Route::patch('{country}/edit', 'update');
+        // Route::get('{country}/destroy', 'destroy')->name('destroy');
+        Route::delete('{country}/destroy', 'destroy')->name('destroy');
+    });
+});
+
+Route::controller(TrashedCountryController::class)->group(function () {
+    Route::get('country/trashed', 'index')->name('country.trashed');
+    Route::patch('country/{id}/restore', 'restore')->name('country.restore');
+    Route::delete('country/{id}/delete', 'delete')->name('country.delete');
+});

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Countries</title>
+    <title>Trashed Countries</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
@@ -17,11 +17,10 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-6">
-                                <h2 class="m-0">Countries</h2>
+                                <h2 class="m-0">Trashed Countries</h2>
                             </div>
                             <div class="col-6 text-end">
-                                <a href="{{ route('country.trashed') }}" class="btn btn-outline-primary">Trashed Countries</a>
-                                <a href="{{ route('country.create') }}" class="btn btn-outline-primary">Add Country</a>
+                                <a href="{{ route('country.index') }}" class="btn btn-outline-primary">Countries</a>
                             </div>
                         </div>
                     </div>
@@ -61,12 +60,18 @@
                                             <td>{{ $country->name }}</td>
                                             <td>{{ $country->capital }}</td>
                                             <td>
-                                                <a href="{{ route('country.edit', $country) }}"
-                                                    class="btn btn-primary">Edit</a>
-                                                <form action="{{ route('country.destroy', $country) }}" method="POST" class="d-inline">
+                                                <form action="{{ route('country.restore', $country->id) }}" method="POST"
+                                                    class="d-inline">
                                                     @csrf
-                                                    @method("DELETE")
-                                                    <input type="submit" value="Delete" class="btn btn-danger">
+                                                    @method('PATCH')
+                                                    <input type="submit" value="Restore" class="btn btn-primary">
+                                                </form>
+                                                <form action="{{ route('country.delete', $country->id) }}" method="POST"
+                                                    class="d-inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <input type="submit" value="Permanent Delete"
+                                                        class="btn btn-danger">
                                                 </form>
                                                 {{-- <a href="{{ route('country.destroy', $country) }}"
                                                     class="btn btn-danger">Delete</a> --}}
